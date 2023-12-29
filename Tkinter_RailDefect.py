@@ -3,6 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import cv2
 import numpy as np
+import Normalization_image as ni
 
 class ImageSelectorApp:
     def __init__(self, root):
@@ -79,15 +80,15 @@ class ImageSelectorApp:
 
     def find_dark_spots(self):
         if self.image_path and self.selection_coordinates:
-            # Read the entire image
+            # Read the whole image
             full_image = cv2.imread(self.image_path)
 
-            # Convert the selected region to grayscale
+            # Convert the selected region to monochrome
             selected_region = full_image[int(self.selection_coordinates[1]):int(self.selection_coordinates[3]),
                              int(self.selection_coordinates[0]):int(self.selection_coordinates[2])]
             gray_selected_region = cv2.cvtColor(selected_region, cv2.COLOR_BGR2GRAY)
 
-            # Apply threshold to find dark spots
+            # Apply threshold to finded dark spots
             _, thresholded = cv2.threshold(gray_selected_region, 50, 255, cv2.THRESH_BINARY_INV)
 
             # Find contours of dark spots

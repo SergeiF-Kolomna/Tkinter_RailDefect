@@ -14,7 +14,7 @@ class ImageSelectorApp:
         self.selection_coordinates = None
         self.dark_spots_coordinates = None
 
-        # GUI components
+        # Interface
         self.load_button = tk.Button(root, text="Load Image", command=self.load_image)
         self.load_button.pack(pady=10)
 
@@ -30,7 +30,7 @@ class ImageSelectorApp:
         self.selection_display = tk.Label(root, text="")
         self.selection_display.pack()
 
-        self.selected_canvas = tk.Canvas(root, width=100, height=100)  # Adjust the size as needed
+        self.selected_canvas = tk.Canvas(root, width=100, height=100)  # Needed size
         self.selected_canvas.pack()
 
         self.find_dark_spots_button = tk.Button(root, text="Find Dark Spots", command=self.find_dark_spots)

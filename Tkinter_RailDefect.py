@@ -3,7 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import cv2
 import numpy as np
-import Normalization_image as ni
+import TK_normalization_image as tni
 
 class ImageSelectorApp:
     def __init__(self, root):
@@ -45,7 +45,8 @@ class ImageSelectorApp:
 
     def display_image(self):
         image = Image.open(self.image_path)
-        self.image_tk = ImageTk.PhotoImage(image)
+        mini_image = tni.main_resize(image, 700)
+        self.image_tk = ImageTk.PhotoImage(mini_image)
         self.main_canvas.config(width=self.image_tk.width(), height=self.image_tk.height())
         self.main_canvas.create_image(0, 0, anchor=tk.NW, image=self.image_tk)
 

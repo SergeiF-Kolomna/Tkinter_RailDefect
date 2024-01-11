@@ -10,6 +10,9 @@ class ImageSelectorApp:
         self.root = root
         self.root.title("Image Selector")
 
+        #self.f_top = Frame(root)
+        #self.f_bottom = Frame(root)
+
         # Variables
         self.image_path = None
         self.selection_coordinates = None
@@ -17,7 +20,8 @@ class ImageSelectorApp:
 
         # Interface
         self.load_button = tk.Button(root, text="Load Image", command=self.load_image)
-        self.load_button.pack(pady=10)
+        #self.load_button.pack(pady=10, side = "left")
+        self.load_button.pack(pady=10, anchor=tk.NW)
 
         self.main_canvas = tk.Canvas(root)
         self.main_canvas.pack(expand=tk.YES, fill=tk.BOTH)
@@ -35,7 +39,7 @@ class ImageSelectorApp:
         self.selected_canvas.pack()
 
         self.find_dark_spots_button = tk.Button(root, text="Find Dark Spots", command=self.find_dark_spots)
-        self.find_dark_spots_button.pack(pady=10)
+        self.find_dark_spots_button.pack(pady=10, side = "left")
 
     def load_image(self):
         file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")])
@@ -44,9 +48,10 @@ class ImageSelectorApp:
             self.display_image()
 
     def display_image(self):
+        #global mini_image
         image = Image.open(self.image_path)
-        mini_image = tni.main_resize(image, 700)
-        self.image_tk = ImageTk.PhotoImage(mini_image)
+        self.mini_image = tni.main_resize(image, 700)
+        self.image_tk = ImageTk.PhotoImage(self.mini_image)
         self.main_canvas.config(width=self.image_tk.width(), height=self.image_tk.height())
         self.main_canvas.create_image(0, 0, anchor=tk.NW, image=self.image_tk)
 
@@ -67,11 +72,12 @@ class ImageSelectorApp:
         self.display_selection()
 
     def display_selection(self):
+
         if self.selection_coordinates:
             self.selection_display.config(text=f"Selection Coordinates: {self.selection_coordinates}")
 
             # Extract the selected region from the original image
-            selected_image = Image.open(self.image_path).crop(self.selection_coordinates)
+            selected_image = self.mini_image.crop(self.selection_coordinates)
             selected_image_tk = ImageTk.PhotoImage(selected_image)
 
             # Display the selected region in the second canvas

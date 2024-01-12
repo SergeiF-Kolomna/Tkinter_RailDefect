@@ -4,14 +4,19 @@ from PIL import Image, ImageTk
 import cv2
 import numpy as np
 import TK_normalization_image as tni
+from tkinter import ttk
+
 
 class ImageSelectorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Image Selector")
 
-        #self.f_top = Frame(root)
-        #self.f_bottom = Frame(root)
+        self.f_top = tk.Frame(root)
+        self.f_bottom = tk.LabelFrame(root, text='settings')
+
+        self.f_top.pack()
+        self.f_bottom.pack()
 
         # Variables
         self.image_path = None
@@ -19,17 +24,25 @@ class ImageSelectorApp:
         self.dark_spots_coordinates = None
 
         # Interface
-        self.load_button = tk.Button(root, text="Load Image", command=self.load_image)
-        #self.load_button.pack(pady=10, side = "left")
-        self.load_button.pack(pady=10, anchor=tk.NW)
+        self.load_button = tk.Button(self.f_top, text="Load Image", command=self.load_image)
+        self.load_button.pack(pady=10, side = "left")
+        #self.load_button.pack(pady=10, anchor="nw")
 
-        self.main_canvas = tk.Canvas(root)
-        self.main_canvas.pack(expand=tk.YES, fill=tk.BOTH)
+        # Insert TrackBars
+        self.horizontalScaleH = ttk.Scale(self.f_top, orient=tk.HORIZONTAL, length=200, from_=0.0, to=100.0, value=30)
+        self.horizontalScaleH.pack(pady=10, padx=10, side = "top")
+        self.horizontalScaleS = ttk.Scale(self.f_top, orient=tk.HORIZONTAL, length=200, from_=0.0, to=100.0, value=30)
+        self.horizontalScaleS.pack(pady=10, padx=10, side = "top")
+        self.horizontalScaleV = ttk.Scale(self.f_top, orient=tk.HORIZONTAL, length=200, from_=0.0, to=100.0, value=30)
+        self.horizontalScaleV.pack(pady=10, padx=10, side = "top")
+
+        self.main_canvas = tk.Canvas(self.f_top)
+        self.main_canvas.pack(expand=tk.YES, fill=tk.BOTH, side = "right")
         self.main_canvas.bind("<ButtonPress-1>", self.on_press)
         self.main_canvas.bind("<B1-Motion>", self.on_drag)
         self.main_canvas.bind("<ButtonRelease-1>", self.on_release)
 
-        self.selection_label = tk.Label(root, text="Selection Coordinates:")
+        self.selection_label = tk.Label(root, text="Selection image:")
         self.selection_label.pack()
 
         self.selection_display = tk.Label(root, text="")
@@ -118,6 +131,9 @@ class ImageSelectorApp:
 
             print("Dark Spots Coordinates:", self.dark_spots_coordinates)
 
+    def onScale(self, val):
+        v = int(float(val))
+        self.var.set(v)
 
 if __name__ == "__main__":
     root = tk.Tk()
